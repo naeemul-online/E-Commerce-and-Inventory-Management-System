@@ -1,0 +1,53 @@
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Brand {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Product {
+  id              String      @id @default(cuid())
+  title           String
+  slug            String      @unique
+  description     String
+  regularPrice    Float
+  discountedPrice Float?
+  stock           Int         @default(0)
+  images          String[]
+  isNew           Boolean     @default(false)
+  isOffered       Boolean     @default(false)
+  categoryId      String
+  brandId         String
+  tags            String[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  cartItems       CartItem[]
+  orderItems      OrderItem[]
+  brand           Brand       @relation(fields: [brandId], references: [id])
+  category        Category    @relation(fields: [categoryId], references: [id])
+  reviews         Review[]
+  wishlists       Wishlist[]  @relation("ProductToWishlist")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int      @db.SmallInt
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}

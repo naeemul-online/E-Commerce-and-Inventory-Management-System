@@ -1,0 +1,16 @@
+node_modules
+# Keep environment variables out of version control
+
+
+/generated/prisma
+.vercel
+dist/
+.env
+.env.local
+.vscode
+uploads/*
+
+!uploads/.gitkeep
+*.log
+
+
