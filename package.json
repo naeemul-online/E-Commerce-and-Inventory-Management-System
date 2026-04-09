@@ -49,6 +49,7 @@
     "express-rate-limit": "^8.2.1",
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.3",
+    "libphonenumber-js": "^1.12.41",
     "multer": "^2.0.1",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.5",
