@@ -27,27 +27,7 @@ export const phoneNumberSchema = z
   });
 
 export const AuthValidation = {
-  login: z.object({
-    body: z.object({
-      phone: phoneNumberSchema,
-      password: z.coerce
-        .string("Password is required")
-        .min(6, "Password must be at least 6 characters")
-        .max(20, "Password cannot exceed 20 characters")
-        .optional(), // 🔥 IMPORTANT (for guest users)
-    }),
-  }),
-  setPassword: z.object({
-    body: z.object({
-      userId: z.string("UserId is required"),
-      password: z.coerce
-        .string("Password is required")
-        .min(6, "Password must be at least 6 characters")
-        .max(20, "Password cannot exceed 20 characters")
-        .optional(), // 🔥 IMPORTANT (for guest users)
-    }),
-  }),
-
+  /* Register Zod validation */
   register: z.object({
     body: z.object({
       phone: phoneNumberSchema,
@@ -60,6 +40,44 @@ export const AuthValidation = {
         .string("Password is required")
         .min(6, "Password must be at least 6 characters")
         .max(8, "Password cannot exceed 8 characters"),
+    }),
+  }),
+
+  /* Login zod validation */
+  login: z.object({
+    body: z.object({
+      phone: phoneNumberSchema,
+      password: z.coerce
+        .string("Password is required")
+        .min(6, "Password must be at least 6 characters")
+        .max(8, "Password max 8 characters"),
+    }),
+  }),
+
+  /* register zod validation */
+  guest: z.object({
+    body: z.object({
+      phone: phoneNumberSchema,
+      fullName: z.string().max(50).optional(),
+    }),
+  }),
+
+  /* register zod validation */
+  refreshToken: z.object({
+    body: z.object({
+      refreshToken: z.string("Refresh token is required").optional(),
+    }),
+  }),
+
+  /* Set password zod validation */
+
+  setPassword: z.object({
+    body: z.object({
+      phone: phoneNumberSchema,
+      password: z.coerce
+        .string("Password is required")
+        .min(6, "Password must be at least 6 characters")
+        .max(8, "Password max 8 characters"),
     }),
   }),
 };

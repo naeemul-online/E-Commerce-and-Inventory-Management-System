@@ -1,21 +1,22 @@
 model User {
-  id           String        @id @default(cuid())
-  fullName     String
-  email        String?       @unique
-  phone        String        @unique
-  password     String?
-  role         Role          @default(USER)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  profilePhoto String?
-  deletedAt    DateTime?
-  isDeleted    Boolean       @default(false)
-  addresses    Address[]
-  cart         Cart?
-  chatSessions ChatSession[]
-  orders       Order[]
-  reviews      Review[]
-  wishlist     Wishlist?
+  id            String         @id @default(cuid())
+  fullName      String
+  email         String?        @unique
+  phone         String         @unique
+  password      String?
+  role          Role           @default(USER)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  profilePhoto  String?
+  deletedAt     DateTime?
+  isDeleted     Boolean        @default(false)
+  addresses     Address[]
+  cart          Cart?
+  chatSessions  ChatSession[]
+  orders        Order[]
+  reviews       Review[]
+  wishlist      Wishlist?
+  refreshTokens RefreshToken[]
 }
 
 model Address {
@@ -35,9 +36,22 @@ model Address {
   shippingOrders Order[]  @relation("ShippingAddress")
 }
 
+// New model for refresh token management
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
 enum Role {
   USER
   ADMIN
+  SUPER_ADMIN
 }
 
 enum UserStatus {
