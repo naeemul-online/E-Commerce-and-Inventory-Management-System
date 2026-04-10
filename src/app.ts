@@ -39,7 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
   res.send({
-    Message: "E-Commerce  server..",
+    Message: "E-Commerce  server is running..",
   });
 });
 
