@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
-import { userService } from "./user.service";
+import { userService } from "./brand.service";
 
 const updateUser = catchAsync(async (req: Request, res: Response) => {
   const result = await userService.updateUser(req);
