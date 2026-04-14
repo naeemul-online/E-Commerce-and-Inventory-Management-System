@@ -1,35 +1,67 @@
-import { User } from "@prisma/client";
-import * as bcrypt from "bcryptjs";
 import { Request } from "express";
-import config from "../../../config";
 import prisma from "../../../shared/prisma";
+import { generateSlug } from "../../../utils/slug";
 
-const updateUser = async (req: Request): Promise<User> => {
-  const userId = req.params.id as string;
+// CREATE
+const createBrand = async (req: Request) => {
+  const payload: { name: string } = req.body;
 
-  const { password, ...rest } = req.body;
+  const slug = await generateSlug(payload.name, "brand");
 
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { id: userId },
+  return prisma.brand.create({
+    data: {
+      name: payload.name,
+      slug,
+    },
   });
+};
 
-  if (!user) {
-    throw new Error("User not found!");
-  }
+// GET ALL
+const getAllBrands = async () => {
+  return prisma.brand.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+};
 
-  let updateData = { password, ...rest };
+// GET SINGLE
+const getSingleBrand = async (req: Request) => {
+  const id = req.params.id as string;
 
-  if (password) {
-    const hashPassword = await bcrypt.hash(password, Number(config.salt_round));
-    updateData.password = hashPassword;
-  }
+  return prisma.brand.findUnique({
+    where: { id },
+  });
+};
 
-  const result = await prisma.user.update({
-    where: { id: userId },
-    data: updateData,
+// UPDATE
+const updateBrand = async (req: Request) => {
+  const id = req.params.id as string;
+  const { name } = req.body;
+
+  const slug = await generateSlug(name, "brand");
+
+  const result = await prisma.brand.update({
+    where: { id },
+    data: {
+      name: name,
+      slug,
+    },
   });
 
   return result;
 };
 
-export const userService = { updateUser };
+// DELETE
+const deleteBrand = async (req: Request) => {
+  const id = req.params.id as string;
+  return prisma.brand.delete({
+    where: { id },
+  });
+};
+
+export const brandService = {
+  createBrand,
+  getAllBrands,
+  getSingleBrand,
+  updateBrand,
+  deleteBrand,
+};

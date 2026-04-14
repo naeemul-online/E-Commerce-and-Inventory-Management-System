@@ -1,6 +1,7 @@
 import express from "express";
 import { adminRoutes } from "../modules/admin/admin.routes";
 import { authRoutes } from "../modules/auth/auth.routes";
+import { brandRoutes } from "../modules/brand/brand.route";
 import { categoryRoutes } from "../modules/category/category.route";
 import { userRoutes } from "../modules/user/user.route";
 
@@ -24,6 +25,7 @@ const moduleRoutes = [
   { path: "/admin", route: adminRoutes },
   { path: "/user", route: userRoutes },
   { path: "/category", route: categoryRoutes },
+  { path: "/brand", route: brandRoutes },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
