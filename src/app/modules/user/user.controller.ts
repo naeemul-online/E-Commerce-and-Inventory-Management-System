@@ -5,10 +5,6 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { userService } from "./user.service";
 
-/* JWT: accessToken, refreshToken setup
-1. 
-*/
-
 const updateUser = catchAsync(async (req: Request, res: Response) => {
   const result = await userService.updateUser(req);
   sendResponse(res, {

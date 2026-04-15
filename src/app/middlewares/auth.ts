@@ -23,6 +23,7 @@ declare global {
  * @param requiredRoles - optional roles for authorization (e.g., "ADMIN", "USER")
  */
 export const auth = (...requiredRoles: string[]) => {
+
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // 1. Extract token from headers or cookies
@@ -46,12 +47,7 @@ export const auth = (...requiredRoles: string[]) => {
 
       req.user = decoded;
 
-      // 3. Check role-based authorization
-      if (requiredRoles.length && !requiredRoles.includes(decoded.role)) {
-        throw new ApiError(httpStatus.FORBIDDEN, `You are not authorized!`);
-      }
-
-      // 4. Role Authorization
+      // 3. Role-based authorization
       if (requiredRoles.length && !requiredRoles.includes(decoded.role)) {
         throw new ApiError(
           httpStatus.FORBIDDEN,
@@ -78,39 +74,3 @@ export const auth = (...requiredRoles: string[]) => {
 };
 
 export default auth;
-
-// const auth = (...roles: string[]) => {
-//   return async (
-//     req: Request & { user?: any },
-//     res: Response,
-//     next: NextFunction,
-//   ) => {
-//     try {
-//       let token = "";
-//       console.log("Authorization:", req.headers.authorization);
-//       console.log("Cookies:", req.cookies);
-//       if (req.headers.authorization) {
-//         token = req.headers.authorization.split(" ")[1];
-//       } else if (req.cookies.accessToken) {
-//         token = req.cookies.accessToken;
-//       }
-
-//       console.log({ token }, "from auth guard");
-
-//       if (!token) {
-//         throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized!");
-//       }
-
-//       const verifiedUser = jwtHelpers.verifyAccessToken(token);
-
-//       req.user = verifiedUser;
-
-//       if (roles.length && !roles.includes(req.user.role)) {
-//         throw new ApiError(httpStatus.FORBIDDEN, "Forbidden!");
-//       }
-//       next();
-//     } catch (err) {
-//       next(err);
-//     }
-//   };
-// };

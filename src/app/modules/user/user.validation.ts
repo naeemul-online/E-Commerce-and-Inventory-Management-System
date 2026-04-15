@@ -1,46 +1,5 @@
 import { z } from "zod";
-
-/**
- * 🇧🇩 Bangladeshi Phone Regex
- */
-const bdPhoneRegex = /^(?:\+8801|8801|01)[3-9]\d{8}$/;
-
-/**
- * 🌍 International Phone Regex (E.164 Standard)
- */
-const internationalPhoneRegex = /^\+?[1-9]\d{7,14}$/;
-
-/**
- * 📞 Phone Validation Function (Priority Based)
- */
-const phoneSchema = z
-  .string("Phone number is required")
-  .refine((val) => {
-    const cleaned = val.replace(/\s+/g, "");
-
-    // Priority 1: Bangladeshi number
-    if (bdPhoneRegex.test(cleaned)) return true;
-
-    // Priority 2: International number
-    if (internationalPhoneRegex.test(cleaned)) return true;
-
-    return false;
-  }, "Invalid phone number format")
-  .transform((val) => {
-    let cleaned = val.replace(/\s+/g, "");
-
-    // 🇧🇩 Convert to WhatsApp format: +880...
-    if (cleaned.startsWith("01") && cleaned.length === 11) {
-      return `+880${cleaned.slice(1)}`;
-    }
-
-    if (cleaned.startsWith("880")) {
-      return `+${cleaned}`;
-    }
-
-    // 🌍 Ensure international format starts with +
-    return cleaned.startsWith("+") ? cleaned : `+${cleaned}`;
-  });
+import { phoneNumberSchema } from "../auth/auth.validation";
 
 export const UserValidation = {
   /**
@@ -56,7 +15,7 @@ export const UserValidation = {
 
       email: z.string().email("Invalid email address").optional(),
 
-      phone: phoneSchema,
+      phone: phoneNumberSchema,
 
       password: z
         .string("Password is required")
@@ -78,7 +37,7 @@ export const UserValidation = {
       .object({
         fullName: z.string().min(3).max(50).optional(),
         email: z.string().email("Invalid email address").optional(),
-        phone: phoneSchema.optional(),
+        phone: phoneNumberSchema.optional(),
         profilePhoto: z.string("Invalid photo URL").optional(),
         // We usually handle password updates in a separate dedicated route/schema
       })

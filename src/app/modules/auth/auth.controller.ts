@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { cookieHelpers } from "../../../utils/cookieHelpers";
-import { authService } from "./auth.services";
+import { authService } from "./auth.service";
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await authService.registerUser(req);
