@@ -42,13 +42,15 @@ const getSingleCategory = async (req: Request) => {
 const updateCategory = async (req: Request) => {
   const id = req.params.id as string;
   const { name } = req.body;
-
-  const slug = await generateSlug(name, "category");
+  let slug: string | undefined;
+  if (name) {
+    slug = await generateSlug(name, "category");
+  }
 
   const result = await prisma.category.update({
     where: { id },
     data: {
-      name: name,
+      name,
       slug,
     },
   });

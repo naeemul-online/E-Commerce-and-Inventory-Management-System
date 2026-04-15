@@ -23,7 +23,6 @@ router.get("/", categoryController.getAllCategories);
 // GET SINGLE
 router.get(
   "/:id",
-  auth(Role.ADMIN, Role.SUPER_ADMIN),
   validateRequest(CategoryValidation.getSingle),
   categoryController.getSingleCategory,
 );

@@ -1,15 +1,25 @@
 import { NextFunction, Request, Response } from "express";
-import { ZodObject } from "zod";
+import { ZodTypeAny } from "zod";
+
+type ParsedRequestData = {
+  body?: Request["body"];
+  query?: Request["query"];
+  params?: Request["params"];
+  files?: Request["files"];
+  file?: Request["file"];
+};
 
 const validateRequest =
-  (schema: ZodObject) =>
+  (schema: ZodTypeAny) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const parsed = await schema.parseAsync({
+      const parsed = (await schema.parseAsync({
         body: req.body,
         query: req.query,
         params: req.params,
-      });
+        files: req.files,
+        file: req.file,
+      })) as ParsedRequestData;
 
       /**
        * FIX: Only assign to 'body'.

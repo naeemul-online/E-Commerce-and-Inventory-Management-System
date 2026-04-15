@@ -43,8 +43,6 @@ export const registerUser = async (req: Request) => {
     },
   });
 
-  // console.log(user);
-
   // 4. Generate tokens
   const payload: JWTPayload = {
     id: user.id,
@@ -87,7 +85,6 @@ const login = async (req: Request) => {
   const { phone, password } = req.body;
 
   // 1. Find user
-
   const user = await prisma.user.findUnique({
     where: { phone: phone },
   });
@@ -144,7 +141,6 @@ const login = async (req: Request) => {
 /**
  * Logout user (invalidate refresh token)
  */
-
 export const logoutUser = async (refreshToken?: string) => {
   if (refreshToken) {
     await prisma.refreshToken.deleteMany({
@@ -154,16 +150,6 @@ export const logoutUser = async (refreshToken?: string) => {
 
   return { message: "Logged out successfully" };
 };
-
-/* Guest User Login
-1. User enters phone number and full name (optional) → API checks if user exists
-2. If user does NOT exist → create new user with phone + full name, but NO password (guest user)
-3. Generate JWT with isGuest: true and return to client
-4. Client can use this token to access limited features (e.g., browse products, add to cart)
-5. When user wants to or login their account → prompt them to set a password
-6. User sets password → update user record with hashed password, set isGuest: false, and generate new JWT without isGuest flag
-
-*/
 
 /**
  * Refresh access token using refresh token
@@ -217,7 +203,7 @@ export const guestLogin = async (req: Request) => {
     });
   }
 
-  // 4. Generate tokens
+  // Generate tokens
   const payload: JWTPayload = {
     id: user.id,
     role: user.role,
@@ -226,7 +212,7 @@ export const guestLogin = async (req: Request) => {
 
   const { accessToken, refreshToken } = jwtHelpers.generateTokens(payload);
 
-  // 5. Save refresh token to database
+  // Save refresh token to database
   await prisma.refreshToken.create({
     data: {
       userId: user.id,
@@ -283,10 +269,6 @@ const setPassword = async (req: Request) => {
   const user = await prisma.user.findUniqueOrThrow({
     where: { phone: phone },
   });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
 
   const hashedPassword = await bcrypt.hash(password, Number(config.salt_round));
 

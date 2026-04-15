@@ -21,3 +21,11 @@ export const paymentLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 });
+
+export const searchLimiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 30, // Search/autocomplete protection per IP
+    message: "Too many search requests, please try again shortly.",
+    standardHeaders: true,
+    legacyHeaders: false,
+});

@@ -54,7 +54,7 @@ importers:
         specifier: ^1.12.41
         version: 1.12.41
       multer:
-        specifier: ^2.0.1
+        specifier: ^2.1.1
         version: 2.1.1
       node-cron:
         specifier: ^4.2.1
@@ -78,7 +78,7 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
       zod:
-        specifier: ^4.0.3
+        specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
       '@prisma/client':

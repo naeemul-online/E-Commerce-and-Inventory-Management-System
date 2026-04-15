@@ -36,13 +36,15 @@ const getSingleBrand = async (req: Request) => {
 const updateBrand = async (req: Request) => {
   const id = req.params.id as string;
   const { name } = req.body;
-
-  const slug = await generateSlug(name, "brand");
+  let slug: string | undefined;
+  if (name) {
+    slug = await generateSlug(name, "brand");
+  }
 
   const result = await prisma.brand.update({
     where: { id },
     data: {
-      name: name,
+      name,
       slug,
     },
   });
