@@ -155,6 +155,7 @@ export const logoutUser = async (refreshToken?: string) => {
  * Refresh access token using refresh token
  */
 export const refreshAccessToken = async (refreshToken: string) => {
+  console.log(refreshToken);
   if (!refreshToken) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Refresh token not provided");
   }

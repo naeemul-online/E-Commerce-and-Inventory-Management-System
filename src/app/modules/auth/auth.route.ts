@@ -27,6 +27,7 @@ router.post(
 
 router.post(
   "/set-password",
+  auth(Role.ADMIN, Role.SUPER_ADMIN, Role.USER),
   validateRequest(AuthValidation.setPassword),
   authController.setPassword,
 );
