@@ -1,10 +1,22 @@
 import { Request } from "express";
+import httpStatus from "http-status";
 import prisma from "../../../shared/prisma";
 import { generateSlug } from "../../../utils/slug";
+import ApiError from "../../errors/ApiError";
 
 // CREATE
 const createBrand = async (req: Request) => {
   const payload: { name: string } = req.body;
+
+  const isBrandExist = await prisma.brand.findFirst({
+    where: {
+      name: payload.name,
+    },
+  });
+
+  if (isBrandExist) {
+    throw new ApiError(httpStatus.CONFLICT, "This brand already exist!");
+  }
 
   const slug = await generateSlug(payload.name, "brand");
 

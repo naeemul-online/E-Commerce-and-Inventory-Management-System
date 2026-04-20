@@ -1,9 +1,21 @@
 import { Request } from "express";
+import httpStatus from "http-status";
 import prisma from "../../../shared/prisma";
 import { generateSlug } from "../../../utils/slug";
+import ApiError from "../../errors/ApiError";
 
 const createCategory = async (req: Request) => {
   const payload: { name: string } = req.body;
+
+  const isCategoryExist = await prisma.category.findFirst({
+    where: {
+      name: payload.name,
+    },
+  });
+
+  if (isCategoryExist) {
+    throw new ApiError(httpStatus.CONFLICT, "This category already exist!");
+  }
 
   const slug = await generateSlug(payload.name, "category");
 

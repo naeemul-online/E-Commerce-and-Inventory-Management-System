@@ -91,7 +91,7 @@ Business rules:
 Query params:
 
 - `page` (default: `1`)
-- `limit` (allowed: `16`, `20`, `24`, `36`; default: `16`)
+- `limit` (default: `5`)
 - `sort` (`latest`, `oldest`, `price_high_low`, `price_low_high`)
 - `category` (category slug)
 - `brand` (brand slug)

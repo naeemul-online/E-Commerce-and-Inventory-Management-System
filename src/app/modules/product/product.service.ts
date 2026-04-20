@@ -2,7 +2,7 @@ import { Request } from "express";
 import httpStatus from "http-status";
 import ApiError from "../../errors/ApiError";
 import { fileUploader } from "../../../helpers/fileUploader";
-import { buildProductQuery } from "../../../shared/queryBuilder";
+import { buildProductQuery } from "../../../shared/query-builder";
 import prisma from "../../../shared/prisma";
 import { searchService } from "../../../shared/searchService";
 import { generateSlug } from "../../../utils/slug";
