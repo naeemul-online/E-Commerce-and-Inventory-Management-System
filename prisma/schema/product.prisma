@@ -5,6 +5,7 @@ model Category {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[]
+  image String?
 }
 
 model Brand {
@@ -14,6 +15,7 @@ model Brand {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[]
+  image String?
 }
 
 model Product {
@@ -27,6 +29,7 @@ model Product {
   images          String[]
   isNew           Boolean     @default(false)
   isOffered       Boolean     @default(false)
+  isPublished     Boolean     @default(false)
   categoryId      String
   brandId         String
   tags            String[]
