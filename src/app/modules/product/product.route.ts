@@ -35,7 +35,7 @@ router.get(
 
 // GET SINGLE
 router.get(
-  "/:id",
+  "/:slug",
   validateRequest(ProductValidation.getSingle),
   productController.getSingleProduct,
 );

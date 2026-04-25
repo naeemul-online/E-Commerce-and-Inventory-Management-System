@@ -5,6 +5,11 @@ const cuidSchema = z
   .trim()
   .regex(/^c[^\s]{8,}$/, "Invalid ID format");
 
+const slugSchema = z
+  .string({ error: "Slug is required" })
+  .trim()
+  .min(1, "Slug is required");
+
 const toNumber = (value: unknown) =>
   typeof value === "string" || typeof value === "number" ? Number(value) : value;
 
@@ -109,7 +114,7 @@ export const ProductValidation = {
 
   getSingle: z.object({
     params: z.object({
-      id: cuidSchema,
+      slug: slugSchema,
     }),
   }),
 

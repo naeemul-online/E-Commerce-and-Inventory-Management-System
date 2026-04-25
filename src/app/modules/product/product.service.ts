@@ -152,9 +152,9 @@ const searchProducts = async (req: Request) => {
 };
 
 const getSingleProduct = async (req: Request) => {
-  const id = req.params.id as string;
+  const slug = req.params.slug as string;
   const product = await prisma.product.findUnique({
-    where: { id },
+    where: { slug },
     include: {
       category: true,
       brand: true,
