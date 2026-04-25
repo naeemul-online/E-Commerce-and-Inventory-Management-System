@@ -144,8 +144,8 @@ Response shape (optimized for frontend search dropdown):
 
 ### 4) Get Single Product
 
-- **GET** `/api/v1/products/:id`
-- Validation: CUID-like ID check
+- **GET** `/api/v1/products/:slug`
+- Validation: slug is required
 - Access: Public
 
 ---
@@ -161,7 +161,9 @@ Rules:
 - Optional slug regeneration when title changes
 - Optional category/brand existence re-check
 - Optional price rule re-check (`discountedPrice < regularPrice`)
-- When images uploaded, replaces stored images with new Cloudinary URLs
+- When images uploaded:
+  - old Cloudinary images are deleted
+  - stored image list is replaced with new Cloudinary URLs
 
 ---
 

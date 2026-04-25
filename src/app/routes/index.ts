@@ -2,6 +2,7 @@ import express from "express";
 import { adminRoutes } from "../modules/admin/admin.route";
 import { authRoutes } from "../modules/auth/auth.route";
 import { brandRoutes } from "../modules/brand/brand.route";
+import { cartRoutes } from "../modules/cart/cart.route";
 import { categoryRoutes } from "../modules/category/category.route";
 import { productRoutes } from "../modules/product/product.route";
 import { userRoutes } from "../modules/user/user.route";
@@ -27,6 +28,7 @@ const moduleRoutes = [
   { path: "/user", route: userRoutes },
   { path: "/category", route: categoryRoutes },
   { path: "/brand", route: brandRoutes },
+  { path: "/cart", route: cartRoutes },
   { path: "/product", route: productRoutes },
   { path: "/products", route: productRoutes },
 ];
