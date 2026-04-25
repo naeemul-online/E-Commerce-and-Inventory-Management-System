@@ -172,6 +172,21 @@ const updateProduct = async (req: Request) => {
   const id = req.params.id as string;
   const payload = req.body;
   const files = req.files as Express.Multer.File[] | undefined;
+  const hasNewImages = Boolean(files?.length);
+  let existingImages: string[] = [];
+
+  if (hasNewImages) {
+    const existingProduct = await prisma.product.findUnique({
+      where: { id },
+      select: { images: true },
+    });
+
+    if (!existingProduct) {
+      throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+    }
+
+    existingImages = existingProduct.images;
+  }
 
   if (payload.categoryId || payload.brandId) {
     const existing = await prisma.product.findUnique({
@@ -211,6 +226,11 @@ const updateProduct = async (req: Request) => {
   }
 
   const images = await uploadImagesToCloudinary(files);
+  if (images.length && existingImages.length) {
+    await Promise.all(
+      existingImages.map((imageUrl) => fileUploader.deleteFromCloudinary(imageUrl)),
+    );
+  }
 
   return prisma.product.update({
     where: { id },

@@ -2,7 +2,9 @@ import { Role } from "@prisma/client";
 import express from "express";
 
 import auth from "../../middlewares/auth";
+import { upload } from "../../middlewares/fileUpload";
 import validateRequest from "../../middlewares/validateRequest";
+import { parseMultipartData } from "../../../helpers/parseMultipartData";
 
 import { brandController } from "./brand.controller";
 import { BrandValidation } from "./brand.validation";
@@ -13,6 +15,8 @@ const router = express.Router();
 router.post(
   "/",
   auth(Role.ADMIN, Role.SUPER_ADMIN),
+  upload.single("image"),
+  parseMultipartData,
   validateRequest(BrandValidation.create),
   brandController.createBrand,
 );
@@ -32,6 +36,8 @@ router.get(
 router.patch(
   "/:id",
   auth(Role.ADMIN, Role.SUPER_ADMIN),
+  upload.single("image"),
+  parseMultipartData,
   validateRequest(BrandValidation.update),
   brandController.updateBrand,
 );
