@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import { ZodError } from "zod"; // 1. Import ZodError
+import ApiError from "../errors/ApiError";
 
 const sanitizeError = (error: any) => {
   if (process.env.NODE_ENV === "production" && error.code?.startsWith("P")) {
@@ -38,6 +39,12 @@ const globalErrorHandler = (
         message: issue.message,
       };
     });
+  } else if (err instanceof ApiError) {
+    statusCode = err.statusCode;
+    message = err.message || "Application Error";
+    error = {
+      statusCode: err.statusCode,
+    };
   } else if (err instanceof Prisma.PrismaClientValidationError) {
     message = "Validation Error";
     error = err.message;
@@ -49,7 +56,7 @@ const globalErrorHandler = (
     }
   }
 
-  const sanitizedError = error;
+  const sanitizedError = sanitizeError(error);
 
   res.status(statusCode).json({
     success,
