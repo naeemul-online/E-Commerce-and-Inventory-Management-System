@@ -1,33 +1,16 @@
 import { Role } from "@prisma/client";
 import express from "express";
-import httpStatus from "http-status";
 
 import auth from "../../middlewares/auth";
 import { upload } from "../../middlewares/fileUpload";
 import { searchLimiter } from "../../middlewares/rateLimiter";
 import validateRequest from "../../middlewares/validateRequest";
-import ApiError from "../../errors/ApiError";
+import { parseMultipartData } from "../../../helpers/parseMultipartData";
 
 import { productController } from "./product.controller";
 import { ProductValidation } from "./product.validation";
 
 const router = express.Router();
-
-const parseMultipartData = (
-  req: express.Request,
-  _res: express.Response,
-  next: express.NextFunction,
-) => {
-  try {
-    const rawData = req.body?.data;
-    if (typeof rawData === "string") {
-      req.body = JSON.parse(rawData);
-    }
-    next();
-  } catch {
-    next(new ApiError(httpStatus.BAD_REQUEST, "Invalid JSON in form-data field 'data'"));
-  }
-};
 
 // CREATE
 router.post(

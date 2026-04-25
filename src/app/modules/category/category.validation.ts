@@ -1,5 +1,21 @@
 import { z } from "zod";
 
+const uploadedImageSchema = z
+  .custom<Express.Multer.File | undefined>(
+    (file) => file === undefined || typeof file === "object",
+    { message: "Invalid image payload" },
+  )
+  .superRefine((file, ctx) => {
+    if (!file) return;
+
+    if (!file.mimetype.startsWith("image/")) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Only image files are allowed",
+      });
+    }
+  });
+
 export const CategoryValidation = {
   /* Create Category */
   create: z.object({
@@ -10,6 +26,7 @@ export const CategoryValidation = {
         .min(2, "Name must be at least 2 characters")
         .max(50, "Name cannot exceed 50 characters"),
     }),
+    file: uploadedImageSchema.optional(),
   }),
 
   /* Get Single Category */
@@ -32,6 +49,7 @@ export const CategoryValidation = {
         .max(50, "Name cannot exceed 50 characters")
         .optional(),
     }),
+    file: uploadedImageSchema.optional(),
   }),
 
   /* Delete Category */
